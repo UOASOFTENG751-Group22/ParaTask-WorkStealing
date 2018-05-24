@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<project name="LambdaParaTask" default="main" basedir=".">
+ 	<property name="src.dir"   value="src" />
+ 	<property name="doc.dir"   value="docs" />
+	<property name="build.dir" value="bild" />
+ 	<property name="dist.dir"  value="release" />
+	<property name="productName" value="PT"/>
+ 	<property name="jarVersion" value="1.0.0"/>
+	
+	<!-- Check the operating system -->
+    <target name="checkOS">
+    	<condition property="isWindows">
+    		<os family="windows"/>
+    	</condition>
+    	
+    	<condition property="isLinux">
+    		<os family="unix" />
+    	</condition>
+    </target>
+	
+	<!-- The operating system is checked at this point -->
+ 	<!-- Delete the previously made directories -->
+	<target name="clean" depends="checkOS">
+ 		<delete dir="${doc.dir}"  />
+ 		<delete dir="${build.dir}"/>
+ 	</target>
+	
+	<!-- After deleting the previously made directories, create them again -->
+	<target name="makeDir" depends="clean">
+		<mkdir dir="${doc.dir}"  />
+		<mkdir dir="${dist.dir}" />
+		<mkdir dir="${build.dir}"/>
+	</target>
+	
+	<!-- Compile the source codes, export the classes to the build directory -->
+	<target name="compile" depends="makeDir">
+		<javac includeantruntime="false" srcdir="${src.dir}" destdir="${build.dir}">
+			<classpath>
+				<pathelement location="./lib/PARCutils-1.1.0.jar"/>
+			</classpath>
+		</javac>
+	</target>
+	
+	<!-- Compress the classes into a jar file -->
+	<target name="classesJar" depends="compile">
+		<jar  basedir="${build.dir}" destfile="${dist.dir}/${productName}Runtime-${jarVersion}.jar"/>
+	</target>
+	
+	<!-- Document the source codes, export the documentations to the docs directory -->
+	<target name="documentation" depends="compile">
+		<javadoc packagenames="${src.dir}" sourcepath="${src.dir}" destdir="${doc.dir}">
+			<fileset dir="${src.dir}">
+				<include name="**/**" />
+				<exclude name="pt/compiler/parser/java_1_5.jj"/>
+			</fileset>
+			<classpath>
+				<pathelement location="./lib/PARCutils-1.1.0-src.jar"/>
+			</classpath>
+		</javadoc>
+	</target>
+	
+	<!-- Compress the documentations into a jar file -->
+	<target name="docsJar" depends="documentation">
+		<jar destfile="${dist.dir}/${productName}JavaDoc-${jarVersion}.jar" basedir="${doc.dir}"/>
+	</target>
+	
+	<!-- Compress the source files into a jar file -->
+	<target name="sourcesJar">
+		<jar destfile="${dist.dir}/${productName}Src-${jarVersion}.jar" basedir="${src.dir}" />
+	</target>
+	
+	<target name="main" depends="classesJar, docsJar, sourcesJar">
+		<description>The default target of the build file</description>
+	</target>
+</project>
