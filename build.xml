@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <project name="LambdaParaTask" default="main" basedir=".">
  	<property name="src.dir"   value="src" />
- 	<property name="doc.dir"   value="docs" />
+ 	<!-- <property name="doc.dir"   value="docs" /> -->
 	<property name="build.dir" value="bild" />
  	<property name="dist.dir"  value="release" />
-	<property name="productName" value="PT"/>
- 	<property name="jarVersion" value="1.0.0"/>
+	<property name="productName" value="ParaTask-WorkStealing"/>
+ 	<property name="jarVersion" value="1.0.1"/>
 	
 	<!-- Check the operating system -->
     <target name="checkOS">
@@ -21,13 +21,13 @@
 	<!-- The operating system is checked at this point -->
  	<!-- Delete the previously made directories -->
 	<target name="clean" depends="checkOS">
- 		<delete dir="${doc.dir}"  />
+		<!--<delete dir="${doc.dir}"  />-->
  		<delete dir="${build.dir}"/>
  	</target>
 	
 	<!-- After deleting the previously made directories, create them again -->
 	<target name="makeDir" depends="clean">
-		<mkdir dir="${doc.dir}"  />
+		<!--<mkdir dir="${doc.dir}"  />-->
 		<mkdir dir="${dist.dir}" />
 		<mkdir dir="${build.dir}"/>
 	</target>
@@ -46,7 +46,7 @@
 		<jar  basedir="${build.dir}" destfile="${dist.dir}/${productName}Runtime-${jarVersion}.jar"/>
 	</target>
 	
-	<!-- Document the source codes, export the documentations to the docs directory -->
+	<!-- Document the source codes, export the documentations to the docs directory 
 	<target name="documentation" depends="compile">
 		<javadoc packagenames="${src.dir}" sourcepath="${src.dir}" destdir="${doc.dir}">
 			<fileset dir="${src.dir}">
@@ -58,18 +58,20 @@
 			</classpath>
 		</javadoc>
 	</target>
+	-->
 	
-	<!-- Compress the documentations into a jar file -->
+	<!-- Compress the documentations into a jar file 
 	<target name="docsJar" depends="documentation">
 		<jar destfile="${dist.dir}/${productName}JavaDoc-${jarVersion}.jar" basedir="${doc.dir}"/>
 	</target>
+	-->
 	
 	<!-- Compress the source files into a jar file -->
 	<target name="sourcesJar">
 		<jar destfile="${dist.dir}/${productName}Src-${jarVersion}.jar" basedir="${src.dir}" />
 	</target>
-	
-	<target name="main" depends="classesJar, docsJar, sourcesJar">
+
+	<target name="main" depends="classesJar, sourcesJar">
 		<description>The default target of the build file</description>
 	</target>
 </project>
