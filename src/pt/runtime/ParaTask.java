@@ -258,7 +258,7 @@ public class ParaTask {
 			EDT = GuiThread.getEventDispatchThread();
 			listener = new GuiEdtTaskListener();
 			isInitialized = true;
-			System.out.println("ParaTask.init EDT id: " + EDT.getId() + " EDT name: " + EDT.getName());
+//			System.out.println("ParaTask.init EDT id: " + EDT.getId() + " EDT name: " + EDT.getName());
 		}
 		return true;
 	}
