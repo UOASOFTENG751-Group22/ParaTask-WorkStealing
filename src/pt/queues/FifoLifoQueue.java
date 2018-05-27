@@ -48,7 +48,7 @@ import java.util.concurrent.LinkedBlockingQueue;
  * @param <E> The type of elements held in this collection
  *
  */
-public class FifoLifoQueue<E> extends WorkStealingQueue<E> {
+public class FifoLifoQueue<E> extends CircularWorkStealingQueue<E> {
 	
 	private LinkedBlockingQueue<E> globalQueue = new LinkedBlockingQueue<E>();
 	
@@ -147,7 +147,7 @@ public class FifoLifoQueue<E> extends WorkStealingQueue<E> {
 	public boolean add(E e) {
 		
 		long id = Thread.currentThread().getId();
-		LinkedBlockingDeque<E> local = localDeques.get(id);
+		CircularBlockingDeque<E> local = localDeques.get(id);
 		
 		if (local != null) {
 			return addLocal(e);
@@ -197,7 +197,7 @@ public class FifoLifoQueue<E> extends WorkStealingQueue<E> {
 	@Override
 	public E element() {
 		long id = Thread.currentThread().getId();
-		LinkedBlockingDeque<E> deque = localDeques.get(id);
+		CircularBlockingDeque<E> deque = localDeques.get(id);
 		
 		E e;
 		
@@ -214,9 +214,9 @@ public class FifoLifoQueue<E> extends WorkStealingQueue<E> {
 			return e;
 		
 		//-- try to steal from the other threads
-		Iterator<LinkedBlockingDeque<E>> otherDeques = localDeques.values().iterator();
+		Iterator<CircularBlockingDeque<E>> otherDeques = localDeques.values().iterator();
 		while (otherDeques.hasNext()){
-			LinkedBlockingDeque<E> q = otherDeques.next();
+			CircularBlockingDeque<E> q = otherDeques.next();
 			e = q.peekLast();
 			if (e != null)
 				return e;
@@ -240,7 +240,7 @@ public class FifoLifoQueue<E> extends WorkStealingQueue<E> {
 			
 			if (chunksize != 1) {
 				
-				LinkedBlockingDeque<E> thiefDeque = localDeques.get(Thread.currentThread().getId());
+				CircularBlockingDeque<E> thiefDeque = localDeques.get(Thread.currentThread().getId());
 				//-- if managed to steal one element, try to steal chunksize-1 more (in total stealing chunksize elements)
 				int maxElements = chunksize-1;
 				
