@@ -30,4 +30,4 @@ This project aims to implement a circular blocking deque to replace the original
 
 ## How to run 
 
-To be override. @Peter
+This project is the reference lib of benchmark project. So, just execute ant build to generate the jar file of this project and import it into benchmark build path.
